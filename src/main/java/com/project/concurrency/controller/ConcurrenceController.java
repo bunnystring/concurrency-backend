@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/concurrences")
+@RequestMapping("/concurrences")
 public class ConcurrenceController {
 
     private final ConcurrenceService concurrenceService;

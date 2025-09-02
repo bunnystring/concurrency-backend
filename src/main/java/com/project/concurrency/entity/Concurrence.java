@@ -3,22 +3,16 @@ package com.project.concurrency.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
+/**
+ * Entidad que representa un proceso de concurrencia en el sistema.
+ * Hereda los campos comunes de StandardEntity.
+ */
 import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Entity
 @Table(name = "concurrences")
 @Data
-public class Concurrence {
-
-    @Id
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @GeneratedValue
-    @Column(name = "id", columnDefinition = "CHAR(36)")
-    private UUID id;
+public class Concurrence extends StandardEntity{
 
     private String name;
 
