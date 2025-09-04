@@ -8,7 +8,7 @@ import java.util.UUID;
  * Incluye el identificador único, nombre y estado.
  */
 @Data
-public class ConcurrenceDto {
+public class ConcurrencyDto {
 
     /**
      * Identificador único de la concurrencia.

@@ -1,6 +1,7 @@
 package com.project.concurrency.services.impl;
 
 import com.project.concurrency.entity.User;
+import com.project.concurrency.exception.UserException;
 import com.project.concurrency.model.dto.AuthRq;
 import com.project.concurrency.model.dto.AuthRs;
 import com.project.concurrency.model.dto.RegisterRq;
@@ -8,6 +9,8 @@ import com.project.concurrency.repository.UserRepository;
 import com.project.concurrency.security.JwtService;
 import com.project.concurrency.security.UserDetailsServiceImpl;
 import com.project.concurrency.services.AuthService;
+import com.project.concurrency.util.MessageException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -54,7 +58,11 @@ public class AuthServiceImpl implements AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(rq.getUsername());
         Optional<User> userOpt = userRepository.findByUsername(rq.getUsername());
         if (userOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UserException(
+                    LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.toString(),
+                    MessageException.USER_NOT_FOUND
+            );
         }
         User user = userOpt.get();
         String token = jwtService.generateToken(userDetails);
@@ -71,10 +79,18 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthRs register(RegisterRq rq) {
         if (userRepository.findByUsername(rq.getUsername()).isPresent()) {
-            throw new RuntimeException("El nombre de usuario ya existe.");
+            throw new UserException(
+                    LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.toString(),
+                    MessageException.USER_ALREADY_EXISTS
+            );
         }
         if (userRepository.findByEmail(rq.getEmail()).isPresent()) {
-            throw new RuntimeException("El correo electrónico ya está registrado.");
+            throw new UserException(
+                    LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.toString(),
+                    MessageException.EMAIL_IN_USE
+            );
         }
 
         User user = new User();

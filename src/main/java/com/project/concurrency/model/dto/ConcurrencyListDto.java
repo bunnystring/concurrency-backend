@@ -5,13 +5,13 @@ import java.util.List;
 
 /**
  * DTO para representar una lista de concurrencias.
- * Contiene una colección de objetos {@link ConcurrenceDto}.
+ * Contiene una colección de objetos {@link ConcurrencyDto}.
  */
 @Data
-public class ConcurrenceListDto {
+public class ConcurrencyListDto {
 
     /**
      * Lista de concurrencias.
      */
-    private List<ConcurrenceDto> items;
+    private List<ConcurrencyDto> items;
 }
