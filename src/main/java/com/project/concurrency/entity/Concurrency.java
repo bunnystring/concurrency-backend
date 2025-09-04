@@ -10,9 +10,9 @@ import lombok.Data;
  */
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "concurrences")
+@Table(name = "concurrency")
 @Data
-public class Concurrence extends StandardEntity{
+public class Concurrency extends StandardEntity{
 
     private String name;
 

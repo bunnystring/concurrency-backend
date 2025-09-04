@@ -1,19 +1,19 @@
 package com.project.concurrency.concurrent;
 
-import com.project.concurrency.model.dto.ConcurrenceDto;
-import com.project.concurrency.services.ConcurrenceService;
+import com.project.concurrency.model.dto.ConcurrencyDto;
+import com.project.concurrency.services.ConcurrencyService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SaveWithThread extends Thread{
 
-    private final ConcurrenceService concurrenceService;
+    private final ConcurrencyService concurrencyService;
 
-    private final ConcurrenceDto concurrenceDto;
+    private final ConcurrencyDto concurrencyDto;
 
-    public SaveWithThread(ConcurrenceService concurrenceService, ConcurrenceDto concurrenceDto) {
-        this.concurrenceService = concurrenceService;
-        this.concurrenceDto = concurrenceDto;
+    public SaveWithThread(ConcurrencyService concurrencyService, ConcurrencyDto concurrencyDto) {
+        this.concurrencyService = concurrencyService;
+        this.concurrencyDto = concurrencyDto;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class SaveWithThread extends Thread{
         try {
             // Simula tarea lenta (por ejemplo, 5 segundos)
             Thread.sleep(10000);
-            concurrenceService.save(concurrenceDto);
+            concurrencyService.save(concurrencyDto);
             System.out.println("Guardado terminado");
         } catch (InterruptedException e) {
             System.out.println("Guardado interrumpido");

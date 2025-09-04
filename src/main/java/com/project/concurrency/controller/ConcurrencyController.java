@@ -1,10 +1,9 @@
 package com.project.concurrency.controller;
 
-import com.project.concurrency.concurrent.FindAllWithRunnable;
 import com.project.concurrency.concurrent.SaveWithThread;
-import com.project.concurrency.model.dto.ConcurrenceDto;
-import com.project.concurrency.model.dto.ConcurrenceListDto;
-import com.project.concurrency.services.ConcurrenceService;
+import com.project.concurrency.model.dto.ConcurrencyDto;
+import com.project.concurrency.model.dto.ConcurrencyListDto;
+import com.project.concurrency.services.ConcurrencyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,46 +12,46 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/concurrences")
-public class ConcurrenceController {
+@RequestMapping("/concurrency")
+public class ConcurrencyController {
 
-    private final ConcurrenceService concurrenceService;
+    private final ConcurrencyService concurrencyService;
 
 
-    public ConcurrenceController(ConcurrenceService concurrenceService) {
-        this.concurrenceService = concurrenceService;
+    public ConcurrencyController(ConcurrencyService concurrencyService) {
+        this.concurrencyService = concurrencyService;
     }
 
     @GetMapping
-    public ResponseEntity<ConcurrenceListDto> getAll(){
+    public ResponseEntity<ConcurrencyListDto> getAll(){
 
-        ConcurrenceListDto list = concurrenceService.findAll();
+        ConcurrencyListDto list = concurrencyService.findAll();
 
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ConcurrenceDto> getById(@PathVariable UUID id){
+    public ResponseEntity<ConcurrencyDto> getById(@PathVariable UUID id){
 
-        ConcurrenceDto rs = concurrenceService.findById(id);
+        ConcurrencyDto rs = concurrencyService.findById(id);
 
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping
-    public ResponseEntity<ConcurrenceDto> create(@RequestBody ConcurrenceDto dto){
+    public ResponseEntity<ConcurrencyDto> create(@RequestBody ConcurrencyDto dto){
 
-        ConcurrenceDto response = concurrenceService.save(dto);
+        ConcurrencyDto response = concurrencyService.save(dto);
 
         return ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ConcurrenceDto> update(
+    public ResponseEntity<ConcurrencyDto> update(
             @PathVariable UUID id,
-            @RequestBody ConcurrenceDto dto) {
+            @RequestBody ConcurrencyDto dto) {
 
-        ConcurrenceDto responseDto = concurrenceService.update(id, dto);
+        ConcurrencyDto responseDto = concurrencyService.update(id, dto);
 
         return ResponseEntity.ok(responseDto);
     }
@@ -60,15 +59,15 @@ public class ConcurrenceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
 
-        concurrenceService.deleteById(id);
+        concurrencyService.deleteById(id);
 
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("threads")
-    public ResponseEntity<String> threads(@RequestBody ConcurrenceDto dto) {
+    public ResponseEntity<String> threads(@RequestBody ConcurrencyDto dto) {
         // Inicia el hilo de guardado
-        final SaveWithThread hiloGuardar = new SaveWithThread(concurrenceService, dto);
+        final SaveWithThread hiloGuardar = new SaveWithThread(concurrencyService, dto);
         hiloGuardar.start();
 
         // Espera máximo 2 segundos por el guardado
@@ -79,7 +78,7 @@ public class ConcurrenceController {
         // Ejecuta hilo búsqueda por id si el campo viene
         if (dto.getId() != null) {
             final Thread hiloFindById = new Thread(() -> {
-                concurrenceService.findById(dto.getId());
+                concurrencyService.findById(dto.getId());
                 log.info("Buscando por id {}", dto.getId());
             });
             hiloFindById.start();
@@ -91,8 +90,8 @@ public class ConcurrenceController {
 
         // Ejecuta búsqueda de todos
         final Thread hiloFindAll = new Thread(() -> {
-            ConcurrenceListDto concurrenceListDto = concurrenceService.findAll();
-            log.info("Buscando todos {}", concurrenceListDto);
+            ConcurrencyListDto concurrencyListDto = concurrencyService.findAll();
+            log.info("Buscando todos {}", concurrencyListDto);
         });
         hiloFindAll.start();
 
